@@ -85,3 +85,81 @@
 
   // 设计模式 ---> 单例模式
   // 定义: 保证一个类只有一个实例，并提供一个访问它的全局访问点
+
+  // 可以实现，但有缺点
+  // function Test(name) {
+  //   var instace = this
+  //   this.name = name
+  //   Test = function () {
+  //     return instace
+  //   }
+  // }
+  // var a = new Test('a')
+  // var b = new Test('b')
+  // console.log(a === b)
+
+  // var Test = (function () {
+  //   var instace
+  //   return function (name) {
+  //     if (typeof instace === 'object') {
+  //       return instace
+  //     }
+  //     instace = this
+  //     this.name = name
+  //   }
+  // })()
+
+  // var a = new Test()
+  // var b = new Test()
+  // console.log(a === b)
+
+  // 终极版
+  // var getSingle = function (func) {
+  //   var result
+  //   return function () {
+  //     if (!result) {
+  //       result = func.apply(this, arguments)
+  //     }
+  //     return result
+  //     // if (result != null) {
+  //     //   return result
+  //     // }
+  //     // result = func.apply(this, arguments)
+  //     // return result
+  //   }
+  // }
+
+
+  // 设计模式 ----> 代理模式
+  // 定义: 为一个对象提供一种代理以控制对这个对象的访问
+  // 场景: 图片懒加载
+  // 虚拟代理：虚拟代理是把一些开销很大的对象，延迟到真正需要它的时候才去创建执行   ---->图片懒加载, 文件上传
+  // 安全代理: 控制真实对象的访问权限
+  // 保护代理-登录操作后才能看全功能，前端校验
+  // 远程代理(一个对象将不同空间的对象进行局部代理)-监控多个对象的状态, 总机监控分店
+  // 智能代理(调用对象代理处理另一些事情如垃圾回收机制增加额外的服务)-提供额外的其他服务 火车站代售处
+  var MyImage = function () {
+    var oImg = new Image()
+    this.setSrc = function (src) {
+      oImg.src = src
+    }
+    document.body.appendChild(oImg)
+  }
+
+  // var oMyImg = new MyImage()
+  // oMyImg.setSrc('https://img.mp.itc.cn/upload/20170504/75a7369fe13e4ad7bf1f344edd858dfe')
+
+  // var ProxyImage = (function () {
+  //   var oNewImage = new Image()
+  //   var oMyImg = new MyImage()
+  //   oNewImage.onload = function () {
+  //     oMyImg.setSrc(oNewImage.src)
+  //   }
+  //   return function (src) {
+  //     // 占位图
+  //     oMyImg.setSrc('https://img.mp.itc.cn/upload/20170504/75a7369fe13e4ad7bf1f344edd858dfe')
+  //     oNewImage.src = src
+  //   }
+  // })()
+
+  // ProxyImage('https://img.mp.itc.cn/upload/20170504/804510648534430cb3d1087da08313a5')
