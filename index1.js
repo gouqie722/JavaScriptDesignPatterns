@@ -176,4 +176,76 @@
 
 
   // 设计模式 ------> 工厂模式
-  // 
+  // 定义: 工厂模式定义创建对象的接口，但是让子类去真正的实例化，也就是工厂方法将类的实例化延迟到子类
+
+  // 设计模式 ------> 工厂方法模式
+  // 工厂方法模式: 不再有一个唯一的工厂类就创建产品，而是将不同的产品交给对应的工厂子类去实现，每个产品负责生产的子工厂来创造，如果添加新的产品，需要
+  // 做的是添加新的子工厂和产品，而不需要修改其他的工厂代码
+
+  // 设计模式 ------> 装饰者模式
+  // 定义: 在不改变元对象的基础上，通过对其进行包装扩展(添加属性方法)
+
+  // 设计模式 ------> 观察者模式
+  // 定义: 观察者模式, 定义对象间的一种一对多的依赖关系, 当一种对象的状态发生改变时，所有依赖于它的对象都将得到通知
+  // 事实上, 只要你曾经在DOM节点上绑定过事件函数，那么你就曾经使用过观察者模式了
+
+
+  // Event
+  // 1. Event on emit remove once
+  // 2. 有助于了解 观察者模式
+  // 3. node
+
+  function Event() {
+    // 存储 不同事件类型对应的不同的处理函数
+    this.cache = {}
+  }
+
+  Event.prototype.on = function (type, handle) {
+    if (!this.cache[type]) {
+      this.cache[type] = [handle]
+    } else {
+      this.cache[type].push(handle)
+    }
+  }
+
+  Event.prototype.emit = function () {
+    var type = arguments[0]
+    var args = [].slice.call(arguments, 1)
+    for (var i = 0; i < this.cache[type].length; i ++) {
+      this.cache[type][i].apply(this, args)
+    }
+  }
+
+  Event.prototype.empty = function (type) {
+    this.cache[type] = []
+  }
+
+  Event.prototype.remove = function (type, handle) {
+    this.cache[type] = this.cache[type].filter(function (ele) {
+      return !(ele == handle)
+    })
+  }
+
+  Event.prototype.once = function (type, handle) {
+
+  }
+
+  function deal1(time) {
+    console.log('over time1:', time)
+  }
+
+  function deal2(time) {
+    console.log('over time2:', time)
+  }
+
+  var oEvent = new Event()
+  oEvent.on('over', deal1)
+
+  oEvent.on('over', deal2)
+
+  oEvent.emit('over', '1')
+
+  oEvent.remove('over', deal2)
+  oEvent.remove('over', deal1)
+
+  oEvent.emit('over', '2')
